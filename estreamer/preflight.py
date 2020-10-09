@@ -87,21 +87,6 @@ class Preflight( object ):
         """
         try:
             self.logger.debug('Checking python version')
-            if self._isPython27():
-                self.logger.debug('I am version 2.7')
-
-                if self._isPyUnicodeUCS2():
-                   self.logger.debug('I am UnicodeUCS2')
-                
-                else:
-                   self.logger.debug('I am UnicodeUCS4')
-
-            elif self._isPython3():
-                self.logger.debug('Running Python 3')
-            else:
-                self.logger.error( definitions.STRING_PREFLIGHT_WRONG_PYTHON.format( sys.version ) )
-
-            self.logger.debug('Checking python version')
 
             self.logger.debug('Checking settings')
             settings = estreamer.Settings.create( self.args.filepath )

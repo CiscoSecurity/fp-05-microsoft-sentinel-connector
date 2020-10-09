@@ -17,7 +17,7 @@
 #*********************************************************************/
 
 import logging
-import Queue
+import queue
 import time
 import threading
 import multiprocessing
@@ -27,7 +27,7 @@ import estreamer.definitions as defininitions
 class Server( object ):
     """Multi process logging server"""
     def __init__( self, emitSourceTime = False, showAlive = False, queueSize = 0 ):
-        self.queue = multiprocessing.Queue( maxsize = queueSize )
+        self.queue = multiprocessing.queue( maxsize = queueSize )
         self.isRunning = False
         self.thread = None
         self.emitSourceTime = emitSourceTime
@@ -59,7 +59,7 @@ class Server( object ):
             message = self.queue.get( False )
             self.__emit( message )
 
-        except Queue.Empty:
+        except queue.Empty:
             time.sleep( defininitions.TIME_BLINK )
 
 

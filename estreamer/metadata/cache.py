@@ -23,7 +23,7 @@ of metadata from eStreamer
 #*********************************************************************/
 
 #pylint: disable=C0302
-import cPickle
+import pickle
 import os
 import estreamer.common
 import estreamer.crossprocesslogging
@@ -513,7 +513,7 @@ class Cache( object ):
         """Saves current cache to disk"""
         self.logger.info('Saving cache to {0}'.format( self.filepath ))
         with open( self.filepath, 'wb' ) as cacheFile:
-            cPickle.dump( self.data, cacheFile )
+            pickle.dump( self.data, cacheFile )
 
 
 
@@ -531,10 +531,10 @@ class Cache( object ):
 
         try:
             with open( self.filepath, 'rb' ) as cacheFile:
-                data = cPickle.load( cacheFile )
+                data = pickle.load( cacheFile )
                 estreamer.common.extend( self.data, data )
 
-        except (cPickle.UnpicklingError, EOFError) as ex:
+        except (pickle.UnpicklingError, EOFError) as ex:
             self.logger.warning(
                 'Unable to make sense of cache file "{0}" ({1}). Using default settings'.format(
                     self.filepath, ex) )

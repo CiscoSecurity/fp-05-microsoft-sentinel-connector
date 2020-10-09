@@ -1,3 +1,4 @@
+
 #********************************************************************
 #      File:    preflight.py
 #      Author:  Sam Strachan
@@ -16,7 +17,6 @@
 #
 #*********************************************************************/
 from __future__ import print_function
-from __future__ import absolute_import
 import os
 import sys
 
@@ -68,16 +68,47 @@ class Preflight( object ):
 
         return parser.parse_args()
 
+
+
+    def _isPython27( self ):
+        return sys.version.startswith( '2.7' )
+
+
+
+    def _isPyUnicodeUCS2( self ):
+        return sys.maxunicode < 0x10000
+
+
+
     def main( self ):
         """
         Main command line entry point
         """
         try:
             self.logger.debug('Checking python version')
+            if self._isPython27():
+                self.logger.debug('I am version 2.7')
+
+            else:
+                self.logger.error( definitions.STRING_PREFLIGHT_WRONG_PYTHON.format( sys.version ) )
+
+            self.logger.debug('Checking python version')
+            if self._isPyUnicodeUCS2():
+                self.logger.debug('I am UnicodeUCS2')
+
+            else:
+                self.logger.debug('I am UnicodeUCS4' )
 
             self.logger.debug('Checking settings')
             settings = estreamer.Settings.create( self.args.filepath )
-            
+
+            if not os.path.isfile( settings.pkcs12Filepath ):
+                self.logger.error( definitions.STRING_PREFLIGHT_PKCS12_MISSING.format(
+                    os.path.abspath( settings.pkcs12Filepath ),
+                    self.args.filepath ))
+
+                sys.exit( definitions.EXIT_ERROR_CODE )
+
             if settings.host in [ '', '1.2.3.4' ]:
                 self.logger.info( definitions.STRING_PREFLIGHT_HOST )
 

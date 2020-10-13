@@ -27,7 +27,7 @@ import estreamer.definitions as defininitions
 class Server( object ):
     """Multi process logging server"""
     def __init__( self, emitSourceTime = False, showAlive = False, queueSize = 0 ):
-        self.queue = multiprocessing.queue( maxsize = queueSize )
+        self.queue = multiprocessing.Queue( maxsize = queueSize )
         self.isRunning = False
         self.thread = None
         self.emitSourceTime = emitSourceTime

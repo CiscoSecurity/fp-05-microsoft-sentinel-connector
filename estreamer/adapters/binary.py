@@ -1,4 +1,3 @@
-
 #********************************************************************
 #      File:    binary.py
 #      Author:  Sam Strachan / Huxley Barbee
@@ -15,7 +14,6 @@
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
-from __future__ import absolute_import
 import binascii
 import os
 import pickle

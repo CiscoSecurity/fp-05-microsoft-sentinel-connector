@@ -699,7 +699,6 @@ class Cef( object ):
                 self.output = {}
 
 
-
     @staticmethod
     def __sanitize( value ):
         """Escapes invalid characters"""
@@ -710,10 +709,9 @@ class Cef( object ):
         value = value.replace('\\', '\\\\')
         value = value.replace('"', '\\"')
         value = value.replace(']', '\\]')
+        value = value.replace('|', '\|')
 
         return value
-
-
 
     def __convert( self ):
         """Writes the self.output dictionary"""
@@ -789,7 +787,7 @@ class Cef( object ):
             CEF_DEV_PRODUCT,
             CEF_DEV_VERSION,
             sigId,
-            name.replace('|','\|'),
+            name,
             severity,
             data,
             SYSLOG_NUMERIC,

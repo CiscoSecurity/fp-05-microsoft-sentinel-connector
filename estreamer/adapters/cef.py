@@ -498,10 +498,11 @@ MAPPING = {
 
     # 400
     definitions.RECORD_INTRUSION_EVENT: {
-        'sig_id': lambda rec: '[{0}:{1}]'.format(
+        'sig_id': lambda rec: 'INTRUSION:400:{0}:{1}'.format(
             rec['generatorId'],
             rec['@computed.renderedId']
         ),
+
 
         'name': lambda rec: rec['@computed.message'],
 

@@ -26,6 +26,7 @@ import estreamer.common
 import estreamer.definitions as definitions
 import estreamer
 import argparse
+import json
 import estreamer.crossprocesslogging as logging
 
 from estreamer.adapters.kvpair import dumps as kvdumps
@@ -78,6 +79,7 @@ FIELD_MAPPING = {
         View.FW_RULE: 'fw_rule',
         View.FW_RULE_ACTION: 'fw_rule_action',
         View.FW_RULE_REASON: 'fw_rule_reason',
+        View.HOST_IP_ADDR: 'host_ip_addr',
         View.IDS_POLICY: 'ids_policy',
         View.IFACE_EGRESS: 'iface_egress',
         View.IFACE_INGRESS: 'iface_ingress',
@@ -182,6 +184,8 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'hostProfile.blockString': u'',
         'hostProfile.blockType': u'',
         'hostProfile.clientApplications': u'',
@@ -191,7 +195,7 @@ FIELD_MAPPING = {
         'hostProfile.hostLastSeen': u'last_seen',
         'hostProfile.hostMacAddress': u'',
         'hostProfile.hostType': u'host_type',
-        'hostProfile.ipAddress': u'',
+        'hostProfile.ipAddress': u'host_ip_address',
         'hostProfile.ipv6ClientFingerprints': u'',
         'hostProfile.ipv6DhcpFingerprints': u'',
         'hostProfile.ipv6ServerFingerprints': u'',
@@ -233,6 +237,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 12
@@ -243,6 +248,8 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'hostServer.blockLength': u'',
         'hostServer.blockType': u'',
         'hostServer.confidence': u'confidence',
@@ -258,10 +265,13 @@ FIELD_MAPPING = {
     definitions.RECORD_RNA_NEW_NET_PROTOCOL: {
         'deviceId': u'device_id',
         'eventMicrosecond': u'event_usec',
+        'recordTypeDescription': u'description',
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address':u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address',
         'networkProtocol': u'net_proto'},
 
@@ -273,6 +283,9 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'recordTypeDescription': u'description',
         'ipAddress':  u'ip_address',
         'macAddress': u'mac_address',
         'transportProtocol': u'ip_proto'},
@@ -295,6 +308,7 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 16
@@ -314,6 +328,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 17
@@ -324,6 +339,10 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'ipAddress': u'ip_address',
+        'recordTypeDescription': u'description',
         'hostServer.blockLength': u'',
         'hostServer.blockType': u'',
         'hostServer.confidence': u'confidence',
@@ -375,6 +394,10 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'ipAddress': u'ip_address',
+        'recordTypeDescription': u'description',
         'hops': u'hops',
         'macAddress': u'mac_address'},
 
@@ -409,6 +432,7 @@ FIELD_MAPPING = {
     # 27
     definitions.RECORD_RNA_CHANGE_MAC_INFO: {
         'deviceId': u'device_id',
+        'hostIpAddr': u'src_host',
         'eventMicrosecond': u'event_usec',
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
@@ -624,6 +648,8 @@ FIELD_MAPPING = {
         'instanceId': u'instance_id',
         'intrusionEventCount': u'ips_count',
         'iocNumber': u'num_ioc',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'lastPacketTimestamp': u'last_pkt_sec',
         'locationIpv6': u'',
         'monitorRule1': u'monitor_rule_1',
@@ -645,6 +671,7 @@ FIELD_MAPPING = {
         'protocol': u'ip_proto',
         'qosAppliedInterface': u'',
         'qosRuleId': u'',
+        'recordTypeDescription': u'description',
         'referencedHost.blockLength': u'',
         'referencedHost.blockType': u'',
         'referencedHost.data': u'referenced_host',
@@ -661,8 +688,8 @@ FIELD_MAPPING = {
         'securityContext': u'security_context',
         'securityGroupId': u'',
         'securityIntelligenceLayer': u'ip_layer',
-        'securityIntelligenceList1': u'',
-        'securityIntelligenceList2': u'',
+        'securityIntelligenceList1': u'sec_intel_list1',
+        'securityIntelligenceList2': u'sec_intel_list2',
         'securityIntelligenceSourceDestination': u'sec_intel_ip', \
         # -> sec_intel_event
         'sinkholeUuid': u'sinkhole_uuid',
@@ -865,6 +892,7 @@ FIELD_MAPPING = {
         'macAddress': u'mac_address',
         'hasIpv6': u'has_ipv6',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'osfingerprint.blockLength': u'',
         'osfingerprint.blockType': u'',
         'osfingerprint.lastSeen': u'last_seen',
@@ -1576,25 +1604,6 @@ def __selectWithNewKeys( record ):
 
     output = {}
 
-    # Create settings
-    parser = argparse.ArgumentParser(description='Runs eStreamer eNcore')
-    parser.add_argument(
-        'configFilepath',
-        help = 'The filepath of the config file')
-
-    parser.add_argument(
-        '--pkcs12',
-        action = "count",
-        help = 'Reprocess pkcs12 file')
-
-    args = parser.parse_args()
-
-    settingsFilepath = args.configFilepath
-    settings = estreamer.Settings.create( settingsFilepath )
-
-
-    settingsFilepath = args.configFilepath
-
     # Map each of the fields
     if index in FIELD_MAPPING:
         recordMap = FIELD_MAPPING[index]
@@ -1603,22 +1612,12 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
-                    if index == 10 : 
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-                    #logger.info("Key")
-                    #logger.info(key)
 
-#                if self.record['recordType'] == 110 :
-#                    self.logger.info("XFF data")
-#                    for key in self.record:
-#                        self.logger.info(key) # This will return me the key
- #                       for items in self.record.store[key]:
-#                            self.logger.info("    %s" % items) # This will return me the subkey
+                    if index == 13 : 
+                        for x in record :
+                            __logger().info("Record: {0}{1}{2}".format(index, str(x), str(record[x])))
 
- #                           for values in self.record.store[key][items]:
-  #                              self.logger.info("        %s" % values) #this return the values for each subkey)
-#                    self.logger.info(estreamer.common.display(self.record))
+
 
 
 
@@ -1642,7 +1641,7 @@ def __selectWithNewKeys( record ):
 
     # Always copy recordType
     output['rec_type'] = record['recordType']
-
+    
     return output
 
 
@@ -1674,6 +1673,18 @@ def dumps( source ):
     data = __convert( source )
 
     line = '{0}={1} '.format('rec_type', data['rec_type'])
+
+    if 'eventSecond' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0} {1}'.format(line, eventSec)
+        del data['eventSecond']
+
+    if 'event_sec' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0}{1}'.format(line, eventSec)
+        del data['event_sec']
+
+
     del data['rec_type']
 
     # from datetime import datetime

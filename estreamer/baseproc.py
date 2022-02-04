@@ -18,7 +18,7 @@
 #*********************************************************************/
 
 import multiprocessing
-import Queue
+import queue
 import time
 import threading
 
@@ -207,7 +207,7 @@ class QueueProcess( BaseProcess ):
             item = self.inputQueue.get( False )
             self.onReceive( item )
 
-        except Queue.Empty:
+        except queue.Empty:
             self.sleepInput( definitions.TIME_BLINK )
 
         # For now we want to continue on errors
@@ -234,7 +234,7 @@ class QueueProcess( BaseProcess ):
                     self.outputQueue.put( event, False )
                     return
 
-                except Queue.Full:
+                except queue.Full:
                     self.sleepOutput( definitions.TIME_BLINK )
 
 

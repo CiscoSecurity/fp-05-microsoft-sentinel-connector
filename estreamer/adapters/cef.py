@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import binascii
 import copy
 import time
@@ -25,6 +26,7 @@ import estreamer.adapters.kvpair
 import estreamer.definitions as definitions
 import estreamer.common
 from estreamer.metadata import View
+import six
 
 
 # Syslog settings
@@ -503,7 +505,6 @@ MAPPING = {
             rec['@computed.renderedId']
         ),
 
-
         'name': lambda rec: rec['@computed.message'],
 
         'severity': lambda rec: __severity(
@@ -700,12 +701,11 @@ class Cef( object ):
                 self.output = {}
 
 
+
     @staticmethod
     def __sanitize( value ):
-        """Escapes invalid characters"""
-        if not isinstance( value, basestring ):
-            value = str( value )
-
+        value = str(value)
+        
         # Escape \ " ]
         value = value.replace('\\', '\\\\')
         value = value.replace('"', '\\"')
@@ -713,6 +713,8 @@ class Cef( object ):
         value = value.replace('|', '\|')
 
         return value
+
+
 
     def __convert( self ):
         """Writes the self.output dictionary"""
@@ -740,9 +742,9 @@ class Cef( object ):
                 target = self.mapping['viewdata'][source]
                 self.output[target] = value
 
-        keys = self.output.keys()
+        keys = list(self.output.keys())
         for key in keys:
-            if isinstance( self.output[ key ], basestring) and len( self.output[ key ] ) == 0:
+            if isinstance( self.output[ key ], six.string_types) and len( self.output[ key ] ) == 0:
                 del self.output[ key ]
 
             elif self.output[ key ] == 0:

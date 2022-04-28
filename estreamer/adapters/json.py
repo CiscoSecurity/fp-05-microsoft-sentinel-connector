@@ -34,3 +34,4 @@ def loads( line ):
 def dumps( data ):
     """Serializes the incoming object as a json string"""
     return json.dumps(data,cls=UTF8Encoder)
+

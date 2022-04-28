@@ -1029,6 +1029,18 @@ RECORDS = {
         'attributes': [ { 'block': BLOCK_FILE_EVENT_60 } ],
         'category': u'FILELOG MALWARE EVENT' },
 
+    # 501 V11
+    RECORD_FILELOG_EVENT_V11: {
+        'name': u'File Event',
+        'attributes': [ { 'block': BLOCK_FILE_EVENT_79 } ],
+        'category': u'FILELOG EVENT' },
+
+    # 503 V11
+    RECORD_FILELOG_MALWARE_EVENT_V11: {
+        'name': u'File Malware Event',
+        'attributes': [ { 'block': BLOCK_FILE_EVENT_79 } ],
+        'category': u'FILELOG MALWARE EVENT' },
+
     # 510
     METADATA_FILELOG_FILE_TYPE: {
         'name': u'File Type ID Metadata',

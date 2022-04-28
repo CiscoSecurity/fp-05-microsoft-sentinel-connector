@@ -26,6 +26,7 @@ import estreamer.common
 import estreamer.definitions as definitions
 import estreamer
 import argparse
+import json
 import estreamer.crossprocesslogging as logging
 
 from estreamer.adapters.kvpair import dumps as kvdumps
@@ -38,16 +39,21 @@ FIELD_MAPPING = {
         View.APP_PROTO: 'app_proto',
         View.ARCHIVE_FILE_STATUS: 'archive_file_status',
         View.BLOCKED: 'blocked',
+        View.BYTES_RECEIVED: 'bytes_received',
+        View.BYTES_TRANSMITTED: 'bytes_transmitted',
         View.CLASSIFICATION_DESCRIPTION: 'class_desc',
         View.CLASSIFICATION_NAME: 'class',
         View.CLIENT_APP: 'client_app',
+        View.CLIENT_IP: 'client_ip',
+        View.CLIENT_OS: 'client_os',
         View.CLOUD: 'cloud',
         View.CORRELATION_RULE: 'corr_rule',
         View.CORRELATION_POLICY: 'corr_policy',
+        View.COUNTRY_CODE: 'country_code',
         View.DATA: 'data',
         View.DESCRIPTION: 'description',
         View.DESTINATION_APP_PROTO: 'dest_app_proto',
-        View.DESTINATION_IP: 'destinationIp',
+        View.DESTINATION_IP: 'dest_ip',
         View.DESTINATION_IP_COUNTRY: 'dest_ip_country',
         View.DESTINATION_CRITICALITY: 'dest_criticality',
         View.DESTINATION_HOSTTYPE: 'dest_host_type',
@@ -64,6 +70,7 @@ FIELD_MAPPING = {
         View.DNS_RECORD_DESCRIPTION: 'dns_record_desc',
         View.DNS_RESPONSE_NAME: 'dns_response_name',
         View.DNS_RESPONSE_DESCRIPTION: 'dns_response_desc',
+        View.DURATION: 'duration',
         View.EVENT_TIMESTAMP: None,
         View.EVENT_DESC: 'event_desc',
         View.EVENT_SEC: 'event_sec',
@@ -71,6 +78,7 @@ FIELD_MAPPING = {
         View.EVENT_USEC: 'event_usec',
         View.FILE_ACTION: 'file_action',
         View.FILE_POLICY: 'file_policy',
+        View.FILE_ANALYSIS_STATUS: 'file_analysis_status',
         View.FILE_STORAGE_STATUS: 'file_storage_status',
         View.FILE_SANDBOX_STATUS: 'file_sandbox_status',
         View.FILE_TYPE: 'file_type',
@@ -78,6 +86,8 @@ FIELD_MAPPING = {
         View.FW_RULE: 'fw_rule',
         View.FW_RULE_ACTION: 'fw_rule_action',
         View.FW_RULE_REASON: 'fw_rule_reason',
+        View.HOST_IP_ADDR: 'host_ip_addr',
+        View.INDEX: 'index',
         View.IDS_POLICY: 'ids_policy',
         View.IFACE_EGRESS: 'iface_egress',
         View.IFACE_INGRESS: 'iface_ingress',
@@ -99,10 +109,12 @@ FIELD_MAPPING = {
         View.MSG: 'msg',
         View.NET_PROTO: 'net_proto',
         View.NETWORK_ANALYSIS_POLICY: 'net_analysis_policy',
-        View.ORIGINAL_CLIENT_SRC_IP: 'originalClientSrcIp',
+        View.ORIGINAL_CLIENT_SRC_IP: 'original_src_ip',
         View.PARENT_DETECTION: 'parent_detection',
         View.PRIORITY: 'priority',
+        View.PROTOCOL: 'protocol',
         View.REC_TYPE_SIMPLE: 'rec_type_simple',
+        View.REC_TYPE_CATEGORY: 'rec_type_category',
         View.REC_TYPE_DESCRIPTION: 'rec_type_desc',
         View.RENDERED_ID: 'sid',
         View.RETRO_DISPOSITION: 'retro_disposition',
@@ -142,7 +154,13 @@ FIELD_MAPPING = {
         View.URL_CATEGORY: 'url_category',
         View.URL_REPUTATION: 'url_reputation',
         View.USER: 'user',
-        View.WEB_APP: 'web_app' },
+        View.USER_AUTH_TYPE: 'user_auth_type',
+        View.VPN_PROFILE: 'vpn_profile',
+        View.VPN_POLICY: 'vpn_policy',
+        View.VPN_TYPE: 'vpn_type',
+        View.WEB_APP: 'web_app',
+        View.XFF_TYPE: 'xff_type',
+        View.XFF_HTTP_URI: 'xff_uri'},
 
     # 2
     definitions.RECORD_PACKET: {
@@ -163,7 +181,7 @@ FIELD_MAPPING = {
     # 9
     definitions.RECORD_INTRUSION_IMPACT_ALERT: {
         'blockLength': u'',
-        'blockType': u'',
+        'blockType': u'blockType',
         'description.blockLength': u'',
         'description.blockType': u'',
         'description.data': u'description',
@@ -182,6 +200,8 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'hostProfile.blockString': u'',
         'hostProfile.blockType': u'',
         'hostProfile.clientApplications': u'',
@@ -191,7 +211,7 @@ FIELD_MAPPING = {
         'hostProfile.hostLastSeen': u'last_seen',
         'hostProfile.hostMacAddress': u'',
         'hostProfile.hostType': u'host_type',
-        'hostProfile.ipAddress': u'',
+        'hostProfile.ipAddress': u'host_ip_address',
         'hostProfile.ipv6ClientFingerprints': u'',
         'hostProfile.ipv6DhcpFingerprints': u'',
         'hostProfile.ipv6ServerFingerprints': u'',
@@ -233,6 +253,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 12
@@ -243,6 +264,8 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'hostServer.blockLength': u'',
         'hostServer.blockType': u'',
         'hostServer.confidence': u'confidence',
@@ -258,10 +281,13 @@ FIELD_MAPPING = {
     definitions.RECORD_RNA_NEW_NET_PROTOCOL: {
         'deviceId': u'device_id',
         'eventMicrosecond': u'event_usec',
+        'recordTypeDescription': u'description',
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address':u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address',
         'networkProtocol': u'net_proto'},
 
@@ -273,6 +299,9 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'recordTypeDescription': u'description',
         'ipAddress':  u'ip_address',
         'macAddress': u'mac_address',
         'transportProtocol': u'ip_proto'},
@@ -294,7 +323,8 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 16
@@ -314,6 +344,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 17
@@ -324,6 +355,10 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'ipAddress': u'ip_address',
+        'recordTypeDescription': u'description',
         'hostServer.blockLength': u'',
         'hostServer.blockType': u'',
         'hostServer.confidence': u'confidence',
@@ -344,7 +379,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address'},
 
     # 20
@@ -375,6 +410,10 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
+        'ipAddress': u'ip_address',
+        'recordTypeDescription': u'description',
         'hops': u'hops',
         'macAddress': u'mac_address'},
 
@@ -391,7 +430,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address',
         'port': u'port'},
 
@@ -409,6 +448,7 @@ FIELD_MAPPING = {
     # 27
     definitions.RECORD_RNA_CHANGE_MAC_INFO: {
         'deviceId': u'device_id',
+        'hostIpAddr': u'src_host',
         'eventMicrosecond': u'event_usec',
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
@@ -429,7 +469,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'mac.address': u'additional_mac_address',
         'mac.blockLength': u'',
         'mac.blockType': u'',
@@ -584,7 +624,7 @@ FIELD_MAPPING = {
     definitions.RECORD_RNA_CONNECTION_STATISTICS: {
         'applicationId': u'app_proto',
         'blockLength': u'',
-        'blockType': u'',
+        'blockType': u'blockType',
         'clientApplicationId': u'client_app',
         'clientApplicationVersion.blockLength': u'',
         'clientApplicationVersion.blockType': u'',
@@ -594,7 +634,10 @@ FIELD_MAPPING = {
         'clientUrl.data': u'url',
         'connectionCounter': u'connection_id',
         'destinationAutonomousSystem': u'dest_autonomous_system',
+        'destIpDynamicAttributes': u'dest_ip_dynamic_attributes',
         'destinationMask': u'dest_mask',
+        'destinationSecurityGroupTag': u'destination_security_group_tag',
+        'destinationSecurityGroupTagType': u'destination_security_group_tag_type',
         'destinationTos': u'dest_tos',
         'deviceId': u'device_id',
         'dnsQuery.blockLength': u'',
@@ -604,6 +647,7 @@ FIELD_MAPPING = {
         'dnsResponseType': u'dns_resp_id',
         'dnsTtl': u'dns_ttl',
         'egressInterface': u'iface_egress',
+        'egressVRFName': u'egress_vrf_name',
         'egressZone': u'sec_zone_egress',
         'endpointProfileId': u'',
         'fileEventCount': u'file_count',
@@ -621,9 +665,12 @@ FIELD_MAPPING = {
         'initiatorPort': u'src_port',
         'initiatorTransmittedBytes': u'src_bytes',
         'initiatorTransmittedPackets': u'src_pkts',
+        'ingressVRFName': u'ingress_vrf_name',
         'instanceId': u'instance_id',
         'intrusionEventCount': u'ips_count',
         'iocNumber': u'num_ioc',
+        'ipv6Address': u'src_ipv6',
+        'hostIpAddr':u'src_host',
         'lastPacketTimestamp': u'last_pkt_sec',
         'locationIpv6': u'',
         'monitorRule1': u'monitor_rule_1',
@@ -638,13 +685,15 @@ FIELD_MAPPING = {
         'netbios.blockType': u'',
         'netbios.data': u'netbios_domain',
         'netflowSource': u'netflow_src',
-        'networkAnalysisPolicyRevision': u'',
-        'originalClientCountry': u'',
-        'originalClientIpAddress': u'',
+        'networkAnalysisPolicyRevision': u'network_analysis_policy_revision',
+        'originalClientCountry': u'original_src_country',
+        'originalClientSrcIp' : u'original_client_src_ip',
+        'originalSrcIP': u'original_src_ip',
         'policyRevision': u'fw_policy', # -> int -> string
         'protocol': u'ip_proto',
-        'qosAppliedInterface': u'',
-        'qosRuleId': u'',
+        'qosAppliedInterface': u'qoa_applied_interface',
+        'qosRuleId': u'qoa_rule_id',
+        'recordTypeDescription': u'description',
         'referencedHost.blockLength': u'',
         'referencedHost.blockType': u'',
         'referencedHost.data': u'referenced_host',
@@ -661,8 +710,8 @@ FIELD_MAPPING = {
         'securityContext': u'security_context',
         'securityGroupId': u'',
         'securityIntelligenceLayer': u'ip_layer',
-        'securityIntelligenceList1': u'',
-        'securityIntelligenceList2': u'',
+        'securityIntelligenceList1': u'sec_intel_list1',
+        'securityIntelligenceList2': u'sec_intel_list2',
         'securityIntelligenceSourceDestination': u'sec_intel_ip', \
         # -> sec_intel_event
         'sinkholeUuid': u'sinkhole_uuid',
@@ -670,6 +719,9 @@ FIELD_MAPPING = {
         'snmpOut': u'snmp_out',
         'sourceAutonomousSystem': u'src_autonomous_system',
         'sourceMask': u'src_mask',
+        'sourceIpDynamicAttributes': u'source_ip_dynamic_attributes',
+        'sourceSecurityGroupTag': u'source_security_group_tag',
+        'sourceSecurityGroupTagType': u'source_security_group_tag_type',
         'sourceTos': u'src_tos',
         'sslActualAction': u'ssl_actual_action',
         'sslCertificateFingerprint': u'ssl_cert_fingerprint',
@@ -692,6 +744,7 @@ FIELD_MAPPING = {
         'sslUrlCategory': u'ssl_url_category',
         'sslVersion': u'ssl_version',
         'tcpFlag': u'tcp_flags',
+        'threatIntelligenceCategory': u'threat_intelligence_category',
         'tunnelRuleId': u'',
         'urlCategory': u'url_category',
         'urlReputation': u'url_reputation',
@@ -851,9 +904,7 @@ FIELD_MAPPING = {
         'blockType': u'',
         'protocol': u'ip_proto',
         'id': u'id',
-        'name.blockLength': u'',
-        'name.blockType': u'',
-        'name.data': u'name'},
+        'username': u'username'},
 
     # 101
     definitions.RECORD_RNA_NEW_OS: {
@@ -865,6 +916,7 @@ FIELD_MAPPING = {
         'macAddress': u'mac_address',
         'hasIpv6': u'has_ipv6',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'osfingerprint.blockLength': u'',
         'osfingerprint.blockType': u'',
         'osfingerprint.lastSeen': u'last_seen',
@@ -884,7 +936,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'identity.blockLength': u'',
         'identity.blockType': u'',
         'identity.sourceId': u'source_id',
@@ -1239,9 +1291,64 @@ FIELD_MAPPING = {
         'eventType.blockLength': u'',
         'eventType.blockType': u'',
         'eventType.data': u'event_type',
-        'id': u'num_ioc' },
+        'id': u'ioc_id' },
 
-    # 260
+    # 170
+    definitions.RECORD_NEW_VPN_LOGIN: {
+        'blockLength': u'',
+        'blockType': u'',
+        'bytesReceived': u'',
+        'bytesTransmitted': u'',
+        'clientIp': u'client_ip',
+        'macAddress': u'mac_address',
+        'deviceId': u'device_id',
+        'recordTypeCategory': u'category',
+        'sensor': u'sensor',
+        'hostIpAddr': u'src_host',
+        'userLogin.archiveTimestamp': u'archive_timestamp',
+        'userLogin.authType': u'user_auth_type',
+        'userLogin.description.data': u'description',
+        'userLogin.domain.data': u'domain',
+        'userLogin.email.data': u'email',
+        'userLogin.endpointProfileId': u'endpoint_profile_id',
+        'userLogin.ipv6Address': u'ipv6Address',
+        'userLogin.protocol': u'protocol',
+        'userLogin.rangeStart': u'range_start',
+        'userLogin.realmId': u'realm_id',
+        'userLogin.reportedBy.data': u'reported_by',
+        'userLogin.securityGroupId': u'security_group_id',
+        'userLogin.vpnSession.vpnConnectionProfile.data': u'vpn_data',
+        'userLogin.vpnSession.countryCode': u'country_code',
+        'userLogin.vpnSession.connectionDuration': u'vpn_connection_duration',
+        'userLogin.vpnSession.groupPolicy.data': u'vpn_policy',
+        'userLogin.vpnSession.clientApplication.data': u'client_app',
+        'userLogin.userId': u'user',
+        'vpnSession.index': u'index',
+        'userLogin.username.data': u'username'},
+
+    # 171
+    definitions.RECORD_NEW_VPN_LOGOFF: {
+        'blockLength': u'',
+        'blockType': u'',
+        'macAddress': u'mac_address',
+        'deviceId': u'device_id',
+        'clientIp': u'client_ip',
+        'recordTypeCategory': u'category',
+        'sensor': u'sensor',
+        'hostIpAddr': u'src_host',
+        'userLogoff.authType': u'user_auth_type',
+        'userLogoff.description.data': u'description',
+        'userLogoff.domain.data': u'domain',
+        'userLogoff.endpointProfileId': u'endpoint_profile_id',
+        'userLogoff.ipv6Address': u'ipv6Address',
+        'userLogoff.realmId': u'realm_id',
+        'userLogoff.securityGroupId': u'security_group_id',
+        'bytesReceived': u'bytes_received',
+        'bytesTransmitted': u'bytes_transmitted',
+        'clientIp': u'client_ip',
+        'userLogoff.userId': u'user',
+        'userLogoff.username.data': u'username'},
+
     definitions.METADATA_ICMP_TYPE: {
         'blockLength': u'',
         'blockType': u'',
@@ -1332,8 +1439,9 @@ FIELD_MAPPING = {
         'accessControlRuleId': u'fw_rule',
         'applicationId': u'app_proto',
         'blockLength': u'',
-        'blockType': u'',
+        'blockType': u'blockType',
         'blocked': u'blocked',
+        'blockedReasonId': u'blocked_reason_id', # -> read metadata
         'classificationId': u'', # -> read metadata
         'clientApplicationId': u'client_app',
         'connectionCounter': u'connection_id',
@@ -1347,7 +1455,9 @@ FIELD_MAPPING = {
         'eventMicrosecond': u'event_usec',
         'eventSecond': u'event_sec',
         'generatorId': u'gid',
+        'httpHostname.data': u'http_hostname',
         'httpResponse': u'http_response',
+        'httpURI.data': u'http_uri',
         'impact': u'', # -> Derived
         'impactFlags': u'impact_bits',
         'interfaceEgressUuid': u'iface_egress',
@@ -1356,6 +1466,7 @@ FIELD_MAPPING = {
         'ipProtocolId': u'ip_proto',
         'mplsLabel': u'mpls_label',
         'networkAnalysisPolicyUuid': u'',
+        'originalSrcIP': u'original_src_ip',
         'pad': u'',
         'policyUuid': u'ids_policy',
         'priorityId': u'priority',
@@ -1363,6 +1474,11 @@ FIELD_MAPPING = {
         'securityContext': u'security_context',
         'securityZoneEgressUuid': u'sec_zone_egress',
         'securityZoneIngressUuid': u'sec_zone_ingress',
+        'smtpAttachments.data': u'smtp_attachements',
+        'smtpFrom.data': u'smtp_from',
+        'smtpHeaders.data': u'stmp_headers',
+        'smtpTo.data': u'smtp_to',
+        'snortVersion': u'snort_version',
         'sourceCountry': u'src_ip_country',
         'sourceIpAddress': u'src_ip',
         'sourcePortOrIcmpType': u'src_port',
@@ -1397,6 +1513,7 @@ FIELD_MAPPING = {
         'deviceId': u'device_id',
         'direction': u'direction',
         'disposition': u'disposition',
+        'engressVRF': u'iface_egress',
         'fileAnalysisStatus': u'file_sandbox_status',
         'fileEventTimestamp': u'event_sec',
         'fileName.blockLength': u'',
@@ -1406,6 +1523,7 @@ FIELD_MAPPING = {
         'fileStorageStatus': u'file_storage_status',
         'fileTypeId': u'file_type',
         'httpResponse': u'http_response',
+        'ingressVRF': u'iface_ingress',
         'localMalwareAnalysisStatus': u'malware_analysis_status',
         'protocol': u'ip_proto',
         'securityContext': u'security_context',
@@ -1413,6 +1531,10 @@ FIELD_MAPPING = {
         'signature.blockLength': u'',
         'signature.blockType': u'',
         'signature.data': u'signature',
+        'smtpAttachements': u'smtp_attachments',
+        'smtpFrom': u'smtp_from',
+        'smtpHeaders': u'smtp_headers',
+        'smtpTo': u'smtp_to',
         'sourceCountry': u'src_ip_country',
         'sourceIpAddress': u'src_ip',
         'sourcePort': u'src_port',
@@ -1552,6 +1674,7 @@ FIELD_MAPPING = {
 
 
 
+
 # Copies
 
 # 35 <= 15
@@ -1576,25 +1699,6 @@ def __selectWithNewKeys( record ):
 
     output = {}
 
-    # Create settings
-    parser = argparse.ArgumentParser(description='Runs eStreamer eNcore')
-    parser.add_argument(
-        'configFilepath',
-        help = 'The filepath of the config file')
-
-    parser.add_argument(
-        '--pkcs12',
-        action = "count",
-        help = 'Reprocess pkcs12 file')
-
-    args = parser.parse_args()
-
-    settingsFilepath = args.configFilepath
-    settings = estreamer.Settings.create( settingsFilepath )
-
-
-    settingsFilepath = args.configFilepath
-
     # Map each of the fields
     if index in FIELD_MAPPING:
         recordMap = FIELD_MAPPING[index]
@@ -1603,24 +1707,6 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
-                    if index == 10 : 
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-                    #logger.info("Key")
-                    #logger.info(key)
-
-#                if self.record['recordType'] == 110 :
-#                    self.logger.info("XFF data")
-#                    for key in self.record:
-#                        self.logger.info(key) # This will return me the key
- #                       for items in self.record.store[key]:
-#                            self.logger.info("    %s" % items) # This will return me the subkey
-
- #                           for values in self.record.store[key][items]:
-  #                              self.logger.info("        %s" % values) #this return the values for each subkey)
-#                    self.logger.info(estreamer.common.display(self.record))
-
-
 
     # Copy the computed fields
     try:
@@ -1634,6 +1720,9 @@ def __selectWithNewKeys( record ):
                     output[ newKey ] = source[ computedKey ][ key ]
 
     except KeyError as keyError:
+
+        logger = logging.getLogger( __name__ )
+
         raise estreamer.EncoreException(
             'Unable to map {0} field: {1}'.format(
                 View.OUTPUT_KEY,
@@ -1642,7 +1731,7 @@ def __selectWithNewKeys( record ):
 
     # Always copy recordType
     output['rec_type'] = record['recordType']
-
+    
     return output
 
 
@@ -1674,6 +1763,22 @@ def dumps( source ):
     data = __convert( source )
 
     line = '{0}={1} '.format('rec_type', data['rec_type'])
+
+    if 'eventSecond' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0} {1}'.format(line, eventSec)
+        del data['eventSecond']
+
+    if 'event_sec' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0}{1}'.format(line, eventSec)
+        del data['event_sec']
+
+        if(data['rec_type'] == 502) :
+            logger = logging.getLogger( __name__ )
+
+            logger.log(logging.TRACE, 'Dumps | Line={0} | Event Sec {1} '.format(line, eventSec))
+
     del data['rec_type']
 
     # from datetime import datetime

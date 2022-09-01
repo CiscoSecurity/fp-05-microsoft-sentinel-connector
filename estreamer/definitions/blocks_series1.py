@@ -83,14 +83,20 @@ BLOCK_INTRUSION_IMPACT_ALERT_53 = 153
 BLOCK_USER_INFORMATION_DATA_60 = 155
 BLOCK_CORRELATION_EVENT_54 = 156
 BLOCK_USER_LOGIN_INFORMATION_60 = 159
-BLOCK_CONNECTION_STATISTICS_60 = 160
-BLOCK_CONNECTION_STATISTICS_61 = 163
 BLOCK_USER_LOGIN_INFORMATION_61 = 165
-BLOCK_USER_INFORMATION_VPN_LOGIN_62 = 166
-BLOCK_USER_INFORMATION_VPN_LOGOFF_62 = 167
-BLOCK_CONNECTION_STATISTICS_67 = 168
-BLOCK_CONNECTION_STATISTICS_70 = 173
-BLOCK_CONNECTION_STATISTICS_71 = 174
+BLOCK_USER_LOGIN_INFORMATION_DATA_62 = 158
+BLOCK_USER_LOGIN_INFORMATION_61 = 165
+BLOCK_USER_INFORMATION_VPN_SESSION_62 = 166
+BLOCK_USER_UPDATE_MSG_INFORMATION_62 = 167
+
+BLOCK_CONNECTION_STATISTICS_160 = 160
+BLOCK_CONNECTION_STATISTICS_161 = 161
+BLOCK_CONNECTION_STATISTICS_168 = 168
+BLOCK_CONNECTION_STATISTICS_169 = 169
+BLOCK_CONNECTION_STATISTICS_170 = 170
+BLOCK_CONNECTION_STATISTICS_171 = 171
+BLOCK_CONNECTION_STATISTICS_173 = 173
+BLOCK_CONNECTION_STATISTICS_174 = 174
 
 # Custom data blocks
 BLOCK_METADATA_ID_LENGTH_NAME = 10000
@@ -366,19 +372,37 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'email' },
         { 'block': BLOCK_STRING, 'name': 'department' },
         { 'block': BLOCK_STRING, 'name': 'phone' }],
-
-    # 121
-
+ # 121
     BLOCK_USER_LOGIN_INFORMATION_DATA_50: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
-        { 'type': TYPE_UINT32, 'name': 'timestamp' },
+        { 'type': TYPE_UINT32, 'name': 'timeStamp' },
         { 'type': TYPE_UINT32, 'name': 'ipv4Address' },
         { 'block': BLOCK_STRING, 'name': 'username' },
-        { 'type': TYPE_UINT32, 'name': 'userId' },
-        { 'type': TYPE_UINT32, 'name': 'applicationId' },
-        { 'block': BLOCK_STRING, 'name': 'email' }],
+        { 'block': BLOCK_STRING, 'name': 'domain' },
+        { 'block': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'realmId' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT32, 'name': 'protocol' },
+        { 'type': TYPE_UINT16, 'name': 'port' },
+        { 'type': TYPE_UINT16, 'name': 'portRangeStart' },
+        { 'type': TYPE_UINT16, 'name': 'portRangeEnd' },
+        { 'type': TYPE_UINT32, 'name': 'email' },
+        { 'type': TYPE_UINT32, 'name': 'emailSizeBytes' },
+        { 'type': TYPE_IPV6, 'name': 'ipv6Address' },
+        { 'type': BLOCK_STRING, 'name': 'ipLocation' },
+        { 'type': TYPE_UINT8, 'name': 'loginType' },
+        { 'type': TYPE_UINT8, 'name': 'authType' },
+        { 'type': TYPE_UINT32, 'name': 'reportedByType' },
+        { 'type': TYPE_UINT16, 'name': 'reportedByLength' },
+        { 'block': BLOCK_STRING, 'name': 'reportedBy' },
+        { 'block': BLOCK_STRING, 'name': 'description' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionBlockType' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionBlockLength' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionData' }],
 
+    # 122
     BLOCK_HOST_CLIENT_APPLICATION_50: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -696,7 +720,7 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'reportedBy' }],
 
     # 160
-    BLOCK_CONNECTION_STATISTICS_60: [
+    BLOCK_CONNECTION_STATISTICS_160: [
         # Documentation wrong. Missing @pad below
         # and ruleReason incorrectly specified as int16
         { 'type': TYPE_UINT32, 'name': 'blockType' },
@@ -793,8 +817,8 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList1' },
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'}],
 
-    # 163
-    BLOCK_CONNECTION_STATISTICS_61: [
+    # 161
+    BLOCK_CONNECTION_STATISTICS_161: [
         # Documentation wrong. Missing @pad below
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -901,7 +925,7 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'}],
 
   # 168
-    BLOCK_CONNECTION_STATISTICS_67: [
+    BLOCK_CONNECTION_STATISTICS_168: [
         # Documentation wrong. Missing @pad below
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -1008,9 +1032,8 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2' },
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList3'}],
 
-  # 173
-
-    BLOCK_CONNECTION_STATISTICS_70: [
+  # 169
+    BLOCK_CONNECTION_STATISTICS_169: [
         # Documentation wrong. Missing @pad below
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -1066,6 +1089,337 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_BYTE, 'name': 'securityIntelligenceSourceDestination' },
         { 'type': TYPE_BYTE, 'name': 'securityIntelligenceLayer' },
         { 'type': TYPE_UINT16, 'name': 'fileEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'intrusionEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorCountry' },
+        { 'type': TYPE_UINT16, 'name': 'responderCountry' },
+        { 'type': TYPE_UINT16, 'name': 'originalClientCountry' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT32, 'name': 'sourceAutonomousSystem' },
+        { 'type': TYPE_UINT32, 'name': 'destinationAutonomousSystem' },
+        { 'type': TYPE_UINT16, 'name': 'snmpIn' },
+        { 'type': TYPE_UINT16, 'name': 'snmpOut' },
+        { 'type': TYPE_BYTE, 'name': 'sourceTos' },
+        { 'type': TYPE_BYTE, 'name': 'destinationTos' },
+        { 'type': TYPE_BYTE, 'name': 'sourceMask' },
+        { 'type': TYPE_BYTE, 'name': 'destinationMask' },
+        { 'type': TYPE_UUID, 'name': 'securityContext' },
+        { 'type': TYPE_UINT16, 'name': 'vlanId' },
+        { 'block': BLOCK_STRING, 'name': 'referencedHost' },
+        { 'block': BLOCK_STRING, 'name': 'userAgent' },
+        { 'block': BLOCK_STRING, 'name': 'httpReferrer' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UUID, 'name': 'sslPolicyId' },
+        { 'type': TYPE_UINT32, 'name': 'sslRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'sslCipherSuite' },
+        { 'type': TYPE_BYTE, 'name': 'sslVersion' },
+        { 'type': TYPE_UINT32, 'name': 'sslServerCertificateStatus' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslExpectedAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowError' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowMessages' },
+        { 'type': TYPE_UINT64, 'name': 'sslFlowFlags' },
+        { 'block': BLOCK_STRING, 'name': 'sslServerName' },
+        { 'type': TYPE_UINT32, 'name': 'sslUrlCategory' },
+        { 'type': TYPE_UINT256, 'name': 'sslSessionId' },
+        { 'type': TYPE_BYTE, 'name': 'sslSessionIdLength' },
+        { 'type': TYPE_UINT160, 'name': 'sslTicketId' },
+        { 'type': TYPE_BYTE, 'name': 'sslTicketIdLength' },
+        { 'type': TYPE_UUID, 'name': 'networkAnalysisPolicyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_IPV6, 'name': 'locationIpv6' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse' },
+        { 'block': BLOCK_STRING, 'name': 'dnsQuery' },
+        { 'type': TYPE_UINT16, 'name': 'dnsRecordType' },
+        { 'type': TYPE_UINT16, 'name': 'dnsResponseType' },
+        { 'type': TYPE_UINT32, 'name': 'dnsTtl' },
+        { 'type': TYPE_UUID, 'name': 'sinkholeUuid' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList1' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'},
+        { 'type': TYPE_UINT32, 'name': 'threatIntelligenceCategory'}],
+
+  # 170
+
+    BLOCK_CONNECTION_STATISTICS_170: [
+        # Documentation wrong. Missing @pad below
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UUID, 'name': 'ingressZone' },
+        { 'type': TYPE_UUID, 'name': 'egressZone' },
+        { 'type': TYPE_UUID, 'name': 'ingressInterface' },
+        { 'type': TYPE_UUID, 'name': 'egressInterface' },
+        { 'type': TYPE_IPV6, 'name': 'initiatorIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'responderIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'originalClientIpAddress' },
+        { 'type': TYPE_UUID, 'name': 'policyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'ruleId' },
+        { 'type': TYPE_UINT32, 'name': 'tunnelRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'ruleAction' },
+        { 'type': TYPE_UINT32, 'name': 'ruleReason' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorPort' },
+        { 'type': TYPE_UINT16, 'name': 'responderPort' },
+        { 'type': TYPE_UINT16, 'name': 'tcpFlag' },
+        { 'type': TYPE_BYTE, 'name': 'protocol' },
+        { 'type': TYPE_UUID, 'name': 'netflowSource' },
+        { 'type': TYPE_UINT16, 'name': 'instanceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT32, 'name': 'firstPacketTimestamp' },
+        { 'type': TYPE_UINT32, 'name': 'lastPacketTimestamp' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorBytesDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderBytesDropped' },
+        { 'type': TYPE_UUID, 'name': 'qosAppliedInterface' },
+        { 'type': TYPE_UINT32, 'name': 'qosRuleId' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' }, #applicationProtocolId
+        { 'type': TYPE_UINT32, 'name': 'urlCategory' },
+        { 'type': TYPE_UINT32, 'name': 'urlReputation' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'block': BLOCK_STRING, 'name': 'clientUrl' },
+        { 'block': BLOCK_STRING, 'name': 'netbios' },
+        { 'block': BLOCK_STRING, 'name': 'clientApplicationVersion' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule1' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule2' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule3' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule4' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule5' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule6' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule7' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule8' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceSourceDestination' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceLayer' },
+        { 'type': TYPE_UINT16, 'name': 'fileEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'intrusionEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorCountry' },
+        { 'type': TYPE_UINT16, 'name': 'responderCountry' },
+        { 'type': TYPE_UINT16, 'name': 'originalClientCountry' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT32, 'name': 'sourceAutonomousSystem' },
+        { 'type': TYPE_UINT32, 'name': 'destinationAutonomousSystem' },
+        { 'type': TYPE_UINT16, 'name': 'snmpIn' },
+        { 'type': TYPE_UINT16, 'name': 'snmpOut' },
+        { 'type': TYPE_BYTE, 'name': 'sourceTos' },
+        { 'type': TYPE_BYTE, 'name': 'destinationTos' },
+        { 'type': TYPE_BYTE, 'name': 'sourceMask' },
+        { 'type': TYPE_BYTE, 'name': 'destinationMask' },
+        { 'type': TYPE_UUID, 'name': 'securityContext' },
+        { 'type': TYPE_UINT16, 'name': 'vlanId' },
+        { 'block': BLOCK_STRING, 'name': 'referencedHost' },
+        { 'block': BLOCK_STRING, 'name': 'userAgent' },
+        { 'block': BLOCK_STRING, 'name': 'httpReferrer' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UUID, 'name': 'sslPolicyId' },
+        { 'type': TYPE_UINT32, 'name': 'sslRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'sslCipherSuite' },
+        { 'type': TYPE_BYTE, 'name': 'sslVersion' },
+        { 'type': TYPE_UINT32, 'name': 'sslServerCertificateStatus' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslExpectedAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowError' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowMessages' },
+        { 'type': TYPE_UINT64, 'name': 'sslFlowFlags' },
+        { 'block': BLOCK_STRING, 'name': 'sslServerName' },
+        { 'type': TYPE_UINT32, 'name': 'sslUrlCategory' },
+        { 'type': TYPE_UINT256, 'name': 'sslSessionId' },
+        { 'type': TYPE_BYTE, 'name': 'sslSessionIdLength' },
+        { 'type': TYPE_UINT160, 'name': 'sslTicketId' },
+        { 'type': TYPE_BYTE, 'name': 'sslTicketIdLength' },
+        { 'type': TYPE_UUID, 'name': 'networkAnalysisPolicyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT16, 'name': 'sourceSecurityGroupTag'},
+        { 'type': TYPE_UINT16, 'name': 'destinationSecurityGroupTag'},
+        { 'type': TYPE_IPV6, 'name': 'locationIpv6' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse' },
+        { 'block': BLOCK_STRING, 'name': 'dnsQuery' },
+        { 'type': TYPE_UINT16, 'name': 'dnsRecordType' },
+        { 'type': TYPE_UINT16, 'name': 'dnsResponseType' },
+        { 'type': TYPE_UINT32, 'name': 'dnsTtl' },
+        { 'type': TYPE_UUID, 'name': 'sinkholeUuid' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList1' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'},
+        { 'type': TYPE_UINT32, 'name': 'threatIntelligenceCategory'}],
+
+  # 171
+    BLOCK_CONNECTION_STATISTICS_171: [
+        # Documentation wrong. Missing @pad below
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UUID, 'name': 'ingressZone' },
+        { 'type': TYPE_UUID, 'name': 'egressZone' },
+        { 'type': TYPE_UUID, 'name': 'ingressInterface' },
+        { 'type': TYPE_UUID, 'name': 'egressInterface' },
+        { 'type': TYPE_IPV6, 'name': 'initiatorIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'responderIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'originalClientIpAddress' },
+        { 'type': TYPE_UUID, 'name': 'policyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'ruleId' },
+        { 'type': TYPE_UINT32, 'name': 'tunnelRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'ruleAction' },
+        { 'type': TYPE_UINT32, 'name': 'ruleReason' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorPort' },
+        { 'type': TYPE_UINT16, 'name': 'responderPort' },
+        { 'type': TYPE_UINT16, 'name': 'tcpFlag' },
+        { 'type': TYPE_BYTE, 'name': 'protocol' },
+        { 'type': TYPE_UUID, 'name': 'netflowSource' },
+        { 'type': TYPE_UINT16, 'name': 'instanceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT32, 'name': 'firstPacketTimestamp' },
+        { 'type': TYPE_UINT32, 'name': 'lastPacketTimestamp' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorBytesDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderBytesDropped' },
+        { 'type': TYPE_UUID, 'name': 'qosAppliedInterface' },
+        { 'type': TYPE_UINT32, 'name': 'qosRuleId' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' }, #applicationProtocolId
+        { 'type': TYPE_UINT32, 'name': 'urlCategory' },
+        { 'type': TYPE_UINT32, 'name': 'urlReputation' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'block': BLOCK_STRING, 'name': 'clientUrl' },
+        { 'block': BLOCK_STRING, 'name': 'netbios' },
+        { 'block': BLOCK_STRING, 'name': 'clientApplicationVersion' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule1' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule2' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule3' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule4' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule5' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule6' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule7' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule8' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceSourceDestination' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceLayer' },
+        { 'type': TYPE_UINT16, 'name': 'fileEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'intrusionEventCount' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorCountry' },
+        { 'type': TYPE_UINT16, 'name': 'responderCountry' },
+        { 'type': TYPE_UINT16, 'name': 'originalClientCountry' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT32, 'name': 'sourceAutonomousSystem' },
+        { 'type': TYPE_UINT32, 'name': 'destinationAutonomousSystem' },
+        { 'type': TYPE_UINT16, 'name': 'snmpIn' },
+        { 'type': TYPE_UINT16, 'name': 'snmpOut' },
+        { 'type': TYPE_BYTE, 'name': 'sourceTos' },
+        { 'type': TYPE_BYTE, 'name': 'destinationTos' },
+        { 'type': TYPE_BYTE, 'name': 'sourceMask' },
+        { 'type': TYPE_BYTE, 'name': 'destinationMask' },
+        { 'type': TYPE_UUID, 'name': 'securityContext' },
+        { 'type': TYPE_UINT16, 'name': 'vlanId' },
+        { 'block': BLOCK_STRING, 'name': 'referencedHost' },
+        { 'block': BLOCK_STRING, 'name': 'userAgent' },
+        { 'block': BLOCK_STRING, 'name': 'httpReferrer' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UUID, 'name': 'sslPolicyId' },
+        { 'type': TYPE_UINT32, 'name': 'sslRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'sslCipherSuite' },
+        { 'type': TYPE_BYTE, 'name': 'sslVersion' },
+        { 'type': TYPE_UINT32, 'name': 'sslServerCertificateStatus' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslExpectedAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowError' },
+        { 'type': TYPE_UINT32, 'name': 'sslFlowMessages' },
+        { 'type': TYPE_UINT64, 'name': 'sslFlowFlags' },
+        { 'block': BLOCK_STRING, 'name': 'sslServerName' },
+        { 'type': TYPE_UINT32, 'name': 'sslUrlCategory' },
+        { 'type': TYPE_UINT256, 'name': 'sslSessionId' },
+        { 'type': TYPE_BYTE, 'name': 'sslSessionIdLength' },
+        { 'type': TYPE_UINT160, 'name': 'sslTicketId' },
+        { 'type': TYPE_BYTE, 'name': 'sslTicketIdLength' },
+        { 'type': TYPE_UUID, 'name': 'networkAnalysisPolicyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT16, 'name': 'sourceSecurityGroupTag'},
+        { 'type': TYPE_UINT8, 'name': 'sourceSecurityGroupTagType'},
+        { 'type': TYPE_UINT16, 'name': 'destinationSecurityGroupTag'},
+        { 'type': TYPE_UINT8, 'name': 'destinationSecurityGroupTagType'},
+        { 'type': TYPE_IPV6, 'name': 'locationIpv6' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse' },
+        { 'block': BLOCK_STRING, 'name': 'dnsQuery' },
+        { 'type': TYPE_UINT16, 'name': 'dnsRecordType' },
+        { 'type': TYPE_UINT16, 'name': 'dnsResponseType' },
+        { 'type': TYPE_UINT32, 'name': 'dnsTtl' },
+        { 'type': TYPE_UUID, 'name': 'sinkholeUuid' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList1' },
+        { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'},
+        { 'type': TYPE_UINT32, 'name': 'threatIntelligenceCategory'},
+        { 'block': BLOCK_STRING, 'name': 'ingressVRFName'},
+        { 'block': BLOCK_STRING, 'name': 'egressVRFName'}],
+
+  # 173
+
+    BLOCK_CONNECTION_STATISTICS_173: [
+        # Documentation wrong. Missing @pad below
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UUID, 'name': 'ingressZone' },
+        { 'type': TYPE_UUID, 'name': 'egressZone' },
+        { 'type': TYPE_UUID, 'name': 'ingressInterface' },
+        { 'type': TYPE_UUID, 'name': 'egressInterface' },
+        { 'type': TYPE_IPV6, 'name': 'initiatorIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'responderIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'originalClientIpAddress' },
+        { 'type': TYPE_UUID, 'name': 'policyRevision' },
+        { 'type': TYPE_UINT32, 'name': 'ruleId' },
+        { 'type': TYPE_UINT32, 'name': 'tunnelRuleId' },
+        { 'type': TYPE_UINT16, 'name': 'ruleAction' },
+        { 'type': TYPE_UINT32, 'name': 'ruleReason' },
+        { 'type': TYPE_UINT16, 'name': 'initiatorPort' },
+        { 'type': TYPE_UINT16, 'name': 'responderPort' },
+        { 'type': TYPE_UINT16, 'name': 'tcpFlag' },
+        { 'type': TYPE_BYTE, 'name': 'protocol' },
+        { 'type': TYPE_UUID, 'name': 'netflowSource' },
+        { 'type': TYPE_UINT16, 'name': 'instanceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT32, 'name': 'firstPacketTimestamp' },
+        { 'type': TYPE_UINT32, 'name': 'lastPacketTimestamp' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedPackets' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'responderTransmittedBytes' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderPacketsDropped' },
+        { 'type': TYPE_UINT64, 'name': 'initiatorBytesDropped' },
+        { 'type': TYPE_UINT64, 'name': 'responderBytesDropped' },
+        { 'type': TYPE_UUID, 'name': 'qosAppliedInterface' },
+        { 'type': TYPE_UINT32, 'name': 'qosRuleId' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' }, #applicationProtocolId
+        { 'type': TYPE_UINT32, 'name': 'urlCategory' },
+        { 'type': TYPE_UINT32, 'name': 'urlReputation' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'block': BLOCK_STRING, 'name': 'clientUrl' },
+        { 'block': BLOCK_STRING, 'name': 'netbios' },
+        { 'block': BLOCK_STRING, 'name': 'clientApplicationVersion' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule1' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule2' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule3' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule4' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule5' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule6' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule7' },
+        { 'type': TYPE_UINT32, 'name': 'monitorRule8' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceSourceDestination' },
+        { 'type': TYPE_BYTE, 'name': 'securityIntelligenceLayer' },
+        { 'type': TYPE_UINT16, 'name': 'fileCount' },
         { 'type': TYPE_UINT16, 'name': 'intrusionEventCount' },
         { 'type': TYPE_UINT16, 'name': 'initiatorCountry' },
         { 'type': TYPE_UINT16, 'name': 'responderCountry' },
@@ -1125,7 +1479,7 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'destIpDynamicAttributes'}],
 
   # 174
-    BLOCK_CONNECTION_STATISTICS_71: [
+    BLOCK_CONNECTION_STATISTICS_174: [
         # Documentation wrong. Missing @pad below
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -1234,6 +1588,15 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList1' },
         { 'type': TYPE_UINT32, 'name': 'securityIntelligenceList2'},
         { 'type': TYPE_UINT32, 'name': 'threatIntelligenceCategory'},
+        { 'block': BLOCK_STRING, 'name': 'eveProcess'},
+        { 'type': TYPE_BYTE, 'name': 'eveProcessConfidencePercentage'},
+        { 'type': TYPE_BYTE, 'name': 'eveThreatConfidencePercentage'},
+        { 'type': TYPE_BYTE, 'name': 'eveThreatConfidenceIndex'},
+        { 'type': TYPE_BYTE, 'name': 'clientAppDectectorId'},
+        { 'type': TYPE_UINT16, 'name': 'natInitiatorPort'},
+        { 'type': TYPE_UINT16, 'name': 'natResponderPort'},
+        { 'type': TYPE_IPV6, 'name': 'natInitiatorIp'},
+        { 'type': TYPE_IPV6, 'name': 'natResponderIp'},
         { 'block': BLOCK_STRING, 'name': 'ingressVRFName'},
         { 'block': BLOCK_STRING, 'name': 'egressVRFName'},
         { 'block': BLOCK_STRING, 'name': 'sourceIpDynamicAttributes'},
@@ -1265,9 +1628,9 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'reportedBy' }],
 
     # 166
-    BLOCK_USER_INFORMATION_VPN_LOGIN_62: [
+    BLOCK_USER_INFORMATION_VPN_SESSION_62: [
         { 'type': TYPE_UINT32, 'name': 'index' },
-        { 'type': TYPE_BYTE, 'name': 'vpnType'},
+        { 'type': TYPE_BYTE, 'name': 'vpnType' },
         { 'block': BLOCK_STRING, 'name': 'groupPolicy' },
         { 'block': BLOCK_STRING, 'name': 'vpnConnectionProfile' },
         { 'type': TYPE_UINT128, 'name': 'clientIP' },
@@ -1279,7 +1642,7 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT64, 'name': 'bytesReceived' }],
 
     # 167
-    BLOCK_USER_INFORMATION_VPN_LOGOFF_62: [
+    BLOCK_USER_UPDATE_MSG_INFORMATION_62: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
         { 'type': TYPE_UINT32, 'name': 'timestamp' },
@@ -1296,13 +1659,13 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT16, 'name': 'startPort' },
         { 'type': TYPE_UINT16, 'name': 'endPort' },
         { 'block': BLOCK_STRING, 'name': 'email' },
-        { 'type': TYPE_UINT128, 'name': 'ipv6Address' },
-        { 'type': TYPE_UINT128, 'name': 'locationIpv6Address' },
+        { 'type': TYPE_IPV6, 'name': 'ipv6Address' },
+        { 'type': TYPE_IPV6, 'name': 'locationIpv6Address' },
         { 'type': TYPE_BYTE, 'name': 'loginType' },
         { 'type': TYPE_BYTE, 'name': 'authType' },
         { 'block': BLOCK_STRING, 'name': 'reportedBy' },
         { 'block': BLOCK_STRING, 'name': 'description' },
-        { 'list': BLOCK_USER_INFORMATION_VPN_LOGIN_62, 'name': 'vpnSession' }
+        { 'list': BLOCK_USER_INFORMATION_VPN_SESSION_62, 'name': 'vpnSession' },
 ],
 
 
@@ -1316,4 +1679,3 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'length' },
         { 'type': TYPE_VARIABLE, 'length': 'length', 'name': 'name'}]
 }
-

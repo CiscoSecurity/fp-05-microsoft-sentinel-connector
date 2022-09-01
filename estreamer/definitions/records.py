@@ -451,47 +451,63 @@ RECORDS = {
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_71 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_171 }],
         'category': u'RNA' },
 
-    RECORD_RNA_CONNECTION_STATISTICS_V60: {
+    RECORD_RNA_CONNECTION_STATISTICS_V160: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_60 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_160 }],
         'category': u'RNA' },
 
-    RECORD_RNA_CONNECTION_STATISTICS_V61: {
+    RECORD_RNA_CONNECTION_STATISTICS_V161: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_61 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_161 }],
         'category': u'RNA' },
 
-    RECORD_RNA_CONNECTION_STATISTICS_V67: {
+    RECORD_RNA_CONNECTION_STATISTICS_V169: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_67 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_169 }],
         'category': u'RNA' },
 
-    RECORD_RNA_CONNECTION_STATISTICS_V70: {
+    RECORD_RNA_CONNECTION_STATISTICS_V170: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_70 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_170 }],
         'category': u'RNA' },
 
-    RECORD_RNA_CONNECTION_STATISTICS_V71: {
+    RECORD_RNA_CONNECTION_STATISTICS_V171: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
             # This will be 160, 163, 168, 173 or 174
-            { 'block': BLOCK_CONNECTION_STATISTICS_71 }],
+            { 'block': BLOCK_CONNECTION_STATISTICS_171 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V173: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_173 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V174: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_174 }],
         'category': u'RNA' },
 
     # 73
@@ -647,7 +663,7 @@ RECORDS = {
         'name': u'User Dropped Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_DATA_50, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_DATA_60, 'name': 'user'}],
         'category': u'RUA' },
 
     # 93
@@ -655,7 +671,7 @@ RECORDS = {
         'name': u'User Removed Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_DATA_60, 'name': 'user'}],
         'category': u'RUA' },
 
     # 94
@@ -663,7 +679,7 @@ RECORDS = {
         'name': u'New User Identification Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_DATA_60, 'name': 'user'}],
         'category': u'RUA' },
 
     # 95
@@ -671,7 +687,7 @@ RECORDS = {
         'name': u'User Login Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user' },
+            { 'block':  BLOCK_USER_UPDATE_MSG_INFORMATION_62, 'name': 'user' },
         ],
         'category': u'RUA' },
 
@@ -908,7 +924,7 @@ RECORDS = {
         'name': u'New VPN Device Login',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogin' }],
+            { 'block': BLOCK_USER_UPDATE_MSG_INFORMATION_62, 'name': 'userLogin' }],
         'category': u'VPN' },
 
     # 171 6.2+
@@ -916,7 +932,7 @@ RECORDS = {
         'name': u'New VPN Device Logoff',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogoff' }],
+            { 'block': BLOCK_USER_UPDATE_MSG_INFORMATION_62, 'name': 'userLogoff' }],
         'category': u'VPN' },
 
     # 260

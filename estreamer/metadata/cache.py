@@ -82,6 +82,8 @@ class Cache( object ):
     NETMAP_DOMAINS = 'netmapDomains'
     ORIGINAL_SRC_IP = 'originalSrcIp'
     OS_FINGERPRINTS = 'osFingerprints'
+    PACKET_DATA = 'packet'
+    PACKET_DATA_FULL = 'originalPacket'
     PAYLOADS = 'payloads'
     POLICIES = 'policies'
     PRIORITIES = 'priorities'
@@ -148,6 +150,8 @@ class Cache( object ):
         MALWARE_EVENT_TYPES: 'malware_event_types',
         NET_PROTOS: 'net_protos',
         OS_FINGERPRINTS: 'os_fingerprints',
+        PACKET_DATA: 'packet',
+        PACKET_DATA_FULL: 'originalPacket',
         PAYLOADS: 'payloads',
         POLICIES: 'policies',
         PRIORITIES: 'priorities',
@@ -164,6 +168,13 @@ class Cache( object ):
     }
 
     AUTOMAP = {
+
+        # 2
+        definitions.RECORD_PACKET: {
+            'cache': PACKET_DATA,
+            'id': 'id',
+            'value': 'name' },
+
         # 4
         definitions.RECORD_PRIORITY: {
             'cache': PRIORITIES,
@@ -550,6 +561,7 @@ class Cache( object ):
     @staticmethod
     def __default():
         return {
+
             Cache.DEVICES: {
                 0: 'Defense Center'
             },
@@ -751,6 +763,18 @@ class Cache( object ):
                 0: 'No',
                 1: 'Yes',
                 2: 'Would'
+                3: 'Partially Dropped',
+                4: 'Block',
+                5: 'Would be Blocked',
+                6: 'Partial Block',
+                7: 'Drop',
+                8: 'Would Drop',
+                9: 'Reject',
+                10: 'Would be Rejected',
+                11: 'Rejected',
+                12: 'Would be Rejected',
+                13: 'Rewrite',
+                14: 'Would be Rewritten'
             },
 
             Cache.GEOLOCATIONS: {

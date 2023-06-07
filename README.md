@@ -3,6 +3,18 @@
 
 Hello, this code base has moved to https://github.com/CiscoSecurity/fp-05-firepower-cli, you will need to configure the connector to use proper ports for the Microsoft Agent which is detailed in the Microsoft documentation here [Sentinel Data Connectors](https://learn.microsoft.com/en-us/azure/sentinel/connect-data-sources)
 
+The main delta between the projects is the following in the estreamer.conf
+
+            {
+                "adapter": "cef",
+                "enabled": true,
+                "name": "CEFSentinel",
+                "stream": {
+                    "uri": "tcp://127.0.0.1:25226"
+                }
+            }
+            
+            
 
 
 # License

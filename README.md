@@ -1,4 +1,9 @@
 [![Gitter chat](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/CiscoSecurity/Lobby "Gitter chat")
+# Update - EOL Effective 6/6/2023
+
+Hello, this code base has moved to https://github.com/CiscoSecurity/fp-05-firepower-cli, you will need to configure the connector to use proper ports for the Microsoft Agent which is detailed in the Microsoft documentation here [Sentinel Data Connectors](https://learn.microsoft.com/en-us/azure/sentinel/connect-data-sources)
+
+
 
 # License
 

@@ -252,7 +252,7 @@ class Controller( object ):
             self.saveState({
                 'state': {
                     'id': definitions.STATE_ERROR,
-                    'description': ex.message
+                    'description': str(ex)
                 }
             })
 

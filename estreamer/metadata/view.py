@@ -275,8 +275,11 @@ class View( object ):
             for mapping in mappings:
                 if isinstance( mapping['id'], list ):
                     value = record
-                    for key in mapping['id']:
-                        value = value[key]
+                    try:
+                        for key in mapping['id']:
+                            value = value[key]
+                    except KeyError:
+                        continue
 
                     if not isinstance( value, dict ):
                         self.__addValueIfAvailable(

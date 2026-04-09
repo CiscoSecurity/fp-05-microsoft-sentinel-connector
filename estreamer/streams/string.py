@@ -24,7 +24,7 @@ class StringStream( Base ):
 
     def write( self, value ):
         """Writes "value" to the buffer"""
-        if not isinstance( value, basestring ):
+        if not isinstance( value, str ):
             string = str( value )
         else:
             string = value

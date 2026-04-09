@@ -1728,7 +1728,7 @@ def __selectWithNewKeys( record ):
         raise estreamer.EncoreException(
             'Unable to map {0} field: {1}'.format(
                 View.OUTPUT_KEY,
-                keyError.message))
+                str(keyError)))
 
 
     # Always copy recordType

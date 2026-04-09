@@ -35,7 +35,7 @@ def toValue( value, quoteAlways = False ):
         if value is None:
             return "NULL"
 
-        if isinstance( value, basestring ):
+        if isinstance( value, str ):
             value = value.encode( 'utf-8' )
         else:
             value = str( value )

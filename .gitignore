@@ -1,0 +1,13 @@
+.env
+secrets.env
+.secrets
+*.pem
+*.key
+id_rsa
+.envrc
+node_modules/
+__pycache__/
+target/
+*.csv
+*.zip
+*.pcapng

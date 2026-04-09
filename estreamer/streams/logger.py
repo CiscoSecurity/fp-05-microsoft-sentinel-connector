@@ -28,7 +28,7 @@ class LoggerStream( Base ):
 
     def write( self, data ):
         """Writes to the underlying logger"""
-        if isinstance( data, basestring ):
+        if isinstance( data, str ):
             data = data.strip()
 
         self.logger.log( self.level, data )

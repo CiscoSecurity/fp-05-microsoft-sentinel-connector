@@ -256,7 +256,7 @@ class QueueProcess( BaseProcess ):
                 try:
                     self.inputQueue.get( False )
 
-                except Queue.Empty:
+                except queue.Empty:
                     self.sleepInput( definitions.TIME_BLINK )
 
                 self.receiveInput()
